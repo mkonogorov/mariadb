@@ -1,0 +1,30 @@
+version: "3.9"
+services:
+  mariadb:
+    image: "mariadb:${MARIADB_VERSION}"
+    restart: 'always'
+    ports:
+    - "3308:3306"
+    volumes: 
+      - /var/lib/mysqlslave/date:/var/lib/mysqlslave/date
+      - /var/lib/mysqlslave/logs:/var/lib/mysqlslave/logs
+      - /var/docker/mariadb/my.cnf:/etc/mysql/my.cnf
+    networks:
+      -  maria
+    environment:
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_DATABASE: "${MYSQL_DATABASE}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+     - "6080:8080"
+    networks:
+     - maria
+  
+networks:
+    maria:
+      driver: bridge
